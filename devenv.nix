@@ -4,6 +4,9 @@ let
   baseAgentsText = builtins.readFile ./AGENTS.md;
 in
 {
+  agentsInstructions.materializePath = ".codex/config.toml";
+  agentsInstructions.materializeTemplate = "codexConfigToml";
+
   languages.rust = {
     enable = true;
     toolchainFile = ./rust-toolchain.toml;
@@ -47,7 +50,6 @@ in
   agentsInstructions.mergedFragments = lib.mkBefore [ baseAgentsText ];
 
   outputs.rust-toolchain = config.languages.rust.toolchainPackage;
-  outputs.rust-agents = pkgs.writeText "rust-base-agents.md" baseAgentsText;
 
   enterTest = ''
     set -euo pipefail

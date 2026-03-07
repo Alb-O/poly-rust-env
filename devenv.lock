@@ -17,6 +17,23 @@
         "url": "https://github.com/Alb-O/agents-instructions-builder.git"
       }
     },
+    "committer": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1772879998,
+        "narHash": "sha256-hqgTdPAR0NPspwIUQjSdus1XQEMDvVcjqjWLZ/wpYYI=",
+        "ref": "main",
+        "rev": "220360e66e0f3cae29cefbe71b6a277bced5f6c4",
+        "revCount": 1,
+        "type": "git",
+        "url": "https://github.com/Alb-O/committer.git"
+      },
+      "original": {
+        "ref": "main",
+        "type": "git",
+        "url": "https://github.com/Alb-O/committer.git"
+      }
+    },
     "devenv": {
       "locked": {
         "dir": "src/modules",
@@ -73,6 +90,7 @@
     "root": {
       "inputs": {
         "agents-instructions-builder": "agents-instructions-builder",
+        "committer": "committer",
         "devenv": "devenv",
         "nixpkgs": "nixpkgs",
         "rust-overlay": "rust-overlay"

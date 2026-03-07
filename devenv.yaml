@@ -9,5 +9,9 @@ inputs:
   agents-instructions-builder:
     url: git+https://github.com/Alb-O/agents-instructions-builder.git?ref=main
     flake: false
+  committer:
+    url: git+https://github.com/Alb-O/committer.git?ref=main
+    flake: false
 imports:
   - agents-instructions-builder
+  - committer
