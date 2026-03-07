@@ -4,9 +4,6 @@ let
   baseAgentsText = builtins.readFile ./AGENTS.md;
 in
 {
-  agentsInstructions.materializePath = ".codex/config.toml";
-  agentsInstructions.materializeTemplate = "codexConfigToml";
-
   languages.rust = {
     enable = true;
     toolchainFile = ./rust-toolchain.toml;
