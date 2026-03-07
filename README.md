@@ -38,5 +38,5 @@ Then run:
 devenv test
 ```
 
-Example consumer using this base:
-- `Alb-O/rust-polyrepo-consumer-demo` (`order-quote-cli`)
+Example app using this base:
+- `Alb-O/rust-app` (`order-quote-cli`)
