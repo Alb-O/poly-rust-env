@@ -1,30 +1,13 @@
 {
   "nodes": {
-    "materializer": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1772881971,
-        "narHash": "sha256-vEUtNWlZB4Hsh7zuQbBhAgQ1NZJfhOZAw1cUxGAOrmc=",
-        "ref": "main",
-        "rev": "3c9e0e7c0eded81c4fa4629fcfb24ae24e58148c",
-        "revCount": 3,
-        "type": "git",
-        "url": "https://github.com/Alb-O/materializer.git"
-      },
-      "original": {
-        "ref": "main",
-        "type": "git",
-        "url": "https://github.com/Alb-O/materializer.git"
-      }
-    },
     "committer": {
       "flake": false,
       "locked": {
-        "lastModified": 1772882027,
-        "narHash": "sha256-pOzAvoB1YeWIm8LBYSS87QfT6OTHiZ5GH9QMfmbZv14=",
+        "lastModified": 1772917102,
+        "narHash": "sha256-kKmUluFmkdeDjUHrxo0Wtlt3v8pXJykiAADuAzbLCzA=",
         "ref": "main",
-        "rev": "18910277f290030c19f73d3540206c010735a384",
-        "revCount": 3,
+        "rev": "1db4bdf5038c5cdf5f6018d9da38b80ba8a38523",
+        "revCount": 6,
         "type": "git",
         "url": "https://github.com/Alb-O/committer.git"
       },
@@ -37,11 +20,11 @@
     "devenv": {
       "locked": {
         "dir": "src/modules",
-        "lastModified": 1772840537,
-        "narHash": "sha256-Axb80AW0e6Xd/UmtjFnTTPOqxzkI4tzGa8ykk8nKQoo=",
+        "lastModified": 1772909021,
+        "narHash": "sha256-XardsHAeueL09beWx7Z6g0Rb8GZyg5cYz4wqpOkAhcw=",
         "owner": "cachix",
         "repo": "devenv",
-        "rev": "b6208f517a7359d6046c89b5ac0de20cfca3b4c0",
+        "rev": "ff810b7556261e3034f3a8f7006acdb7ff9b26b2",
         "type": "github"
       },
       "original": {
@@ -49,6 +32,23 @@
         "owner": "cachix",
         "repo": "devenv",
         "type": "github"
+      }
+    },
+    "materializer": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1772917102,
+        "narHash": "sha256-AF6/0UrwMHtd6OC8RKNM8Fac0/apkzgLJOeawflezKg=",
+        "ref": "main",
+        "rev": "41b566f8e4503b3c9e97acf5c0fa8170d90d13fd",
+        "revCount": 5,
+        "type": "git",
+        "url": "https://github.com/Alb-O/materializer.git"
+      },
+      "original": {
+        "ref": "main",
+        "type": "git",
+        "url": "https://github.com/Alb-O/materializer.git"
       }
     },
     "nixpkgs": {
@@ -89,9 +89,9 @@
     },
     "root": {
       "inputs": {
-        "materializer": "materializer",
         "committer": "committer",
         "devenv": "devenv",
+        "materializer": "materializer",
         "nixpkgs": "nixpkgs",
         "rust-overlay": "rust-overlay"
       }
