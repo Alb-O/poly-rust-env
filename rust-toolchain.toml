@@ -1,16 +1,4 @@
 [toolchain]
-channel = "nightly"
-profile = "minimal"
-components = [
-  "cargo",
-  "clippy",
-  "llvm-tools-preview",
-  "rust-analyzer",
-  "rust-src",
-  "rustfmt",
-]
-targets = [
-  "wasm32-unknown-unknown",
-  "x86_64-unknown-linux-musl",
-  "aarch64-unknown-linux-gnu",
-]
+channel = "nightly-2026-03-07"
+profile = "default"
+targets = ["wasm32-unknown-unknown"]

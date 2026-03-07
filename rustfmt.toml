@@ -1,4 +1,10 @@
 edition = "2024"
-max_width = 100
+max_width = 120
 newline_style = "Unix"
-use_small_heuristics = "Max"
+hard_tabs = true
+use_try_shorthand = true
+fn_params_layout = "Compressed"
+brace_style = "PreferSameLine"
+condense_wildcard_suffixes = true
+imports_granularity = "One"
+group_imports = "StdExternalCrate"
