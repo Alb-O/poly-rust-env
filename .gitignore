@@ -1,5 +1,12 @@
 .devenv/
 .direnv/
-direnv/
 target/
-AGENTS.override.md
+result
+
+# Lockfiles ignored for fast local-first polyrepo workflow without diff churn
+# Manually `git add -f *.lock` when actually publishing
+devenv.lock
+Cargo.lock
+
+*.local.*
+*.override.*
