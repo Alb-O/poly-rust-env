@@ -7,7 +7,7 @@ inputs:
       nixpkgs:
         follows: nixpkgs
   agents-instructions-builder:
-    url: github:Alb-O/agents-instructions-builder
+    url: git+https://github.com/Alb-O/agents-instructions-builder.git?ref=main
     flake: false
 imports:
   - agents-instructions-builder
