@@ -29,6 +29,23 @@ let
       git add -- "$@"
     '';
   };
+  cargoSortWrapper = pkgs.writeShellScriptBin "cargo-sort-wrapper" ''
+    set -euo pipefail
+
+    opts=()
+    files=()
+
+    while [[ $# -gt 0 ]]; do
+      case "$1" in
+        --*) opts+=("$1"); shift ;;
+        *) files+=("$1"); shift ;;
+      esac
+    done
+
+    for f in "''${files[@]}"; do
+      ${pkgs.lib.getExe pkgs.cargo-sort} "''${opts[@]}" "$(dirname "$f")"
+    done
+  '';
 in
 {
   env.CARGO_BUILD_BUILD_DIR = "${xdgCacheHome}/cargo/targets";
@@ -41,7 +58,17 @@ in
 
   treefmt = {
     enable = lib.mkDefault true;
-    config.programs.rustfmt.enable = lib.mkDefault true;
+    config = {
+      programs.rustfmt.enable = lib.mkDefault true;
+      settings.formatter.cargo-sort = {
+        command = "${cargoSortWrapper}/bin/cargo-sort-wrapper";
+        options = [ "--workspace" ];
+        includes = [
+          "Cargo.toml"
+          "**/Cargo.toml"
+        ];
+      };
+    };
   };
 
   git-hooks = lib.mkIf config.treefmt.enable {
