@@ -2,6 +2,7 @@
 
 let
   baseAgentsText = builtins.readFile ./AGENTS.md;
+  isRustEnvRoot = builtins.baseNameOf (toString config.devenv.root) == "rust-env";
 in
 {
   languages.rust = {
@@ -44,7 +45,10 @@ in
   };
 
   materializer.ownFragments.rust-env = [ baseAgentsText ];
-  materializer.mergedFragments = lib.mkAfter [ baseAgentsText ];
+  materializer.mergedFragments =
+    if isRustEnvRoot
+    then lib.mkAfter [ baseAgentsText ]
+    else lib.mkBefore [ baseAgentsText ];
 
   outputs.rust-toolchain = config.languages.rust.toolchainPackage;
 
