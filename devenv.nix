@@ -12,6 +12,7 @@ let
       "${fromHome}/.cache"
     else
       "/tmp";
+  repoDir = builtins.baseNameOf config.git.root;
   treefmtBin = lib.getExe config.treefmt.config.build.wrapper;
   cargoSortWrapper = pkgs.writeShellScriptBin "cargo-sort-wrapper" ''
     set -euo pipefail
@@ -32,7 +33,7 @@ let
   '';
 in
 {
-  env.CARGO_BUILD_BUILD_DIR = "${xdgCacheHome}/cargo/targets";
+  env.CARGO_BUILD_BUILD_DIR = "${xdgCacheHome}/cargo/targets/${repoDir}";
 
   languages.rust = {
     enable = true;
