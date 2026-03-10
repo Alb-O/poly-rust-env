@@ -12,6 +12,7 @@ Reusable Rust nightly base environment for polyrepo setups using `devenv` v2.
 - Scripts: `fmt`, `fmt-check`, `lint`, `check`, `run-tests`, `check-targets`, `ci`
 - Outputs: `outputs.rust-toolchain`
 - Instructions: exports `AGENTS.md` through `instructions.instructions` for composer consumers
+- Optional Bevy runtime/build wiring from `modules/bevy/`
 - Optional managed Cargo manifest generation from `modules/managed-cargo/`
 
 ## Use
@@ -99,3 +100,21 @@ generated manifest and source-tree outputs for downstream packaging.
 
 For a virtual-workspace layout, keep the root workspace manifest content in
 `Cargo.dvnv.toml` and keep member crate `Cargo.toml` files checked in normally.
+
+## Bevy
+
+Enable this when a Rust repo needs the standard Linux Bevy shell/runtime setup:
+
+```nix
+{
+  "rust-env".bevy.enable = true;
+}
+```
+
+When enabled:
+
+- `LD_LIBRARY_PATH` includes the shared Bevy runtime libraries plus `/run/opengl-driver/lib`
+- the shell gets the shared Bevy runtime libraries, `pkg-config`, and `udev`
+- consumers can reuse the same package-build inputs through:
+  - `"rust-env".bevy.runtimeLibs`
+  - `"rust-env".bevy.nativeBuildInputs`

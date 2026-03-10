@@ -29,6 +29,7 @@ let
 in
 {
   imports = [
+    ./modules/bevy
     ./modules/formatters
     ./modules/managed-cargo
   ];
