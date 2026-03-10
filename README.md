@@ -11,6 +11,7 @@ Reusable Rust nightly base environment for polyrepo setups using `devenv` v2.
 - Git hooks: pre-commit `treefmt` hook enabled
 - Scripts: `fmt`, `fmt-check`, `lint`, `check`, `run-tests`, `check-targets`, `ci`
 - Outputs: `outputs.rust-toolchain`, `outputs.rust-agents`
+- Optional managed Cargo manifest generation from a shared crate catalog
 
 ## Use
 
@@ -51,3 +52,36 @@ Set the option below to isolate artifacts per repo in `targets/<repoDir>`:
   "rust-env".separateCargoBuildDirByRepo = true;
 }
 ```
+
+## Managed Cargo
+
+Enable this when you want each Rust repo to own manifest intent in
+`Cargo.dvnv.toml` while versions come from a shared catalog in this repo.
+
+```nix
+{
+  "rust-env".managedCargo.enable = true;
+}
+```
+
+Available options:
+
+- `"rust-env".managedCargo.enable`
+- `"rust-env".managedCargo.catalogPath`
+- `"rust-env".managedCargo.specPath`
+- `"rust-env".managedCargo.outputPath`
+
+When enabled:
+
+- `Cargo.toml` is generated with a clear "do not edit" header
+- `outputs.cargo_manifest` is exposed for packaging and cross-repo consumers
+- `outputs.rust_deps_catalog` exposes the resolved shared catalog
+- virtual workspace roots are supported, including `[workspace.dependencies]`
+- treefmt `cargo-sort` also formats the configured `rust-env.managedCargo.specPath` when it is inside the repo root
+
+For cross-repo consumers, set `"rust-env".managedCargo.outputPath = null` in the
+imported project so the generated manifest is exposed as an output without
+materializing a file into the consumer repo.
+
+For a virtual-workspace layout, keep the root workspace manifest content in
+`Cargo.dvnv.toml` and keep member crate `Cargo.toml` files checked in normally.
