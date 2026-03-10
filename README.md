@@ -11,6 +11,7 @@ Reusable Rust nightly base environment for polyrepo setups using `devenv` v2.
 - Git hooks: pre-commit `treefmt` hook enabled
 - Scripts: `fmt`, `fmt-check`, `lint`, `check`, `run-tests`, `check-targets`, `ci`
 - Outputs: `outputs.rust-toolchain`
+- Derived package metadata: `rustEnv.package.name` and `outputs.cargo_package_name`
 - Instructions: exports `AGENTS.md` through `instructions.instructions` for composer consumers
 - Optional Bevy runtime/build wiring from `modules/bevy/`
 - Optional managed Cargo manifest generation from `modules/managed-cargo/`
@@ -52,6 +53,30 @@ Set the option below to isolate artifacts per repo in `targets/<repoDir>`:
 ```nix
 {
   rustEnv.separateCargoBuildDirByRepo = true;
+}
+```
+
+## Package Name
+
+For package builds, use the derived package name instead of repeating `pname`
+by hand:
+
+```nix
+{
+  pname = config.rustEnv.package.name;
+}
+```
+
+By default this reads:
+
+- `rustEnv.managedCargo.specPath` when managed Cargo is enabled and the spec has `[package].name`
+- otherwise `Cargo.toml` at the repo root
+
+For virtual workspaces or other non-root package manifests, set:
+
+```nix
+{
+  rustEnv.package.manifestPath = ./apps/my-crate/Cargo.toml;
 }
 ```
 

@@ -9,6 +9,33 @@
 let
   cfg = config.rustEnv;
   managedCargoCfg = cfg.managedCargo;
+  resolveFromRoot =
+    path:
+    let
+      pathString = toString path;
+    in
+    if lib.hasPrefix "/" pathString then pathString else "${config.devenv.root}/${pathString}";
+  managedCargoSpecPath = resolveFromRoot managedCargoCfg.specPath;
+  localCargoManifestPath = "${config.devenv.root}/Cargo.toml";
+  packageManifestPath =
+    if cfg.package.manifestPath != null then
+      resolveFromRoot cfg.package.manifestPath
+    else if managedCargoCfg.enable && builtins.pathExists managedCargoSpecPath then
+      managedCargoSpecPath
+    else if builtins.pathExists localCargoManifestPath then
+      localCargoManifestPath
+    else
+      null;
+  packageManifestValue =
+    if packageManifestPath != null && builtins.pathExists packageManifestPath then
+      builtins.fromTOML (builtins.readFile packageManifestPath)
+    else
+      { };
+  packageName =
+    if packageManifestValue ? package && packageManifestValue.package ? name then
+      packageManifestValue.package.name
+    else
+      null;
   xdgCacheHome =
     let
       fromXdg = builtins.getEnv "XDG_CACHE_HOME";
@@ -42,6 +69,29 @@ in
         Store Cargo build artifacts under a repo-specific subdirectory inside
         ${xdgCacheHome}/cargo/targets.
       '';
+    };
+
+    package = {
+      manifestPath = lib.mkOption {
+        type = lib.types.nullOr (
+          lib.types.oneOf [
+            lib.types.str
+            lib.types.path
+          ]
+        );
+        default = null;
+        description = ''
+          Manifest path used to derive rustEnv.package.name. Defaults to
+          rustEnv.managedCargo.specPath when that file has a [package] table,
+          otherwise falls back to Cargo.toml at the repo root.
+        '';
+      };
+
+      name = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
+        readOnly = true;
+        description = "Package name derived from rustEnv.package.manifestPath.";
+      };
     };
 
   };
@@ -100,9 +150,12 @@ in
 
       outputs = lib.mkMerge [
         {
+          cargo_package_name = packageName;
           rust-toolchain = config.languages.rust.toolchainPackage;
         }
       ];
+
+      rustEnv.package.name = packageName;
 
       enterTest = ''
         set -euo pipefail
@@ -120,6 +173,18 @@ in
         ''}
       '';
     }
+    (lib.mkIf (cfg.package.manifestPath != null) {
+      assertions = [
+        {
+          assertion = builtins.pathExists packageManifestPath;
+          message = "rustEnv.package.manifestPath does not exist: ${packageManifestPath}";
+        }
+        {
+          assertion = packageName != null;
+          message = "rustEnv.package.manifestPath does not contain [package].name: ${packageManifestPath}";
+        }
+      ];
+    })
     (lib.optionalAttrs (options ? instructions && options.instructions ? instructions) {
       # `instructions.instructions` is declared by composer/agent-style modules,
       # not by devenv itself. Guard this assignment so plain Rust-env consumers
