@@ -67,7 +67,7 @@ in
         pkgs.pkg-config
       ]
       ++ lib.optionals pkgs.stdenv.isLinux [
-        pkgs.lld
+        pkgs.clang
         pkgs.mold
       ];
 

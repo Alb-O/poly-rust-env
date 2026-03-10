@@ -1,6 +1,12 @@
 [build]
 target-dir = "target"
 
+[target.'cfg(target_os = "linux")']
+# Use clang to drive linking and force mold underneath it. This is the simplest
+# fast-link path to materialize into consumer repos on Linux.
+linker = "clang"
+rustflags = ["-C", "link-arg=-fuse-ld=mold"]
+
 [alias]
 xcheck = "check --workspace --all-targets --all-features"
 xfmt = "fmt --all"
