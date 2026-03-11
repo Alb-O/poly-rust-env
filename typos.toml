@@ -1,2 +1,2 @@
-[default.extend-words]
+[default.extend-identifiers]
 flate2 = "flate2"

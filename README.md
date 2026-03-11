@@ -8,8 +8,8 @@ Reusable Rust nightly base environment for polyrepo setups using `devenv` v2.
 - Components: `cargo`, `clippy`, `rustfmt`, `rust-analyzer`, `rust-src`, `llvm-tools-preview`
 - Targets: `wasm32-unknown-unknown`, `x86_64-unknown-linux-musl`, `aarch64-unknown-linux-gnu`
 - Treefmt: enabled with `rustfmt` program using `cargo/rustfmt.toml`
-- Git hooks: pre-commit `treefmt` hook enabled
-- Scripts: `fmt`, `fmt-check`, `lint`, `check`, `run-tests`, `check-targets`, `ci`
+- Git hooks: pre-commit `treefmt` and `typos` hooks enabled
+- Scripts: `fmt`, `fmt-check`, `spellcheck`, `spellcheck-fix`, `lint`, `check`, `run-tests`, `check-targets`, `ci`
 - Outputs: `outputs.rust-toolchain`
 - Derived package metadata: `rustEnv.package.name`, `rustEnv.package.version`, `outputs.cargo_package_name`, and `outputs.cargo_package_version`
 - Instructions: exports `AGENTS.md` through `instructions.instructions` for composer consumers
@@ -36,6 +36,17 @@ This composes with `dvnv-rust-env` defaults (for example, `rustfmt` stays enable
 {
   treefmt.config.programs.mdformat.enable = true;
 }
+```
+
+## Consumer typos overrides
+
+Consumers can add a repo-local `typos.toml`, which is merged over
+`rustEnv.typos.managedConfig` and used by both the `spellcheck` scripts and the
+generated pre-commit hook:
+
+```toml
+[default.extend-words]
+flate2 = "flate2"
 ```
 
 ## Cargo build dir layout

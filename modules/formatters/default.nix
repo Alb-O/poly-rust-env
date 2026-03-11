@@ -8,7 +8,12 @@
 let
   managedCargoCfg = config.rustEnv.managedCargo;
   rustfmtConfigPath = ../../cargo/rustfmt.toml;
-  resolveFromRoot = path: if lib.hasPrefix "/" path then path else "${config.devenv.root}/${path}";
+  resolveFromRoot =
+    path:
+    let
+      pathString = toString path;
+    in
+    if lib.hasPrefix "/" pathString then pathString else "${config.devenv.root}/${pathString}";
   # treefmt can only match files under the current repo root. Reduce the managed
   # spec path to a repo-relative include pattern when possible, and ignore it
   # entirely when the user points at something outside the repo.
@@ -39,6 +44,17 @@ let
   ]
   ++ lib.optionals (managedCargoSpecInclude != null) [ managedCargoSpecInclude ];
   treefmtBin = lib.getExe config.treefmt.config.build.wrapper;
+  typosBin = lib.getExe pkgs.typos;
+  typosToml = pkgs.formats.toml { };
+  typosLocalConfigPath = resolveFromRoot config.rustEnv.typos.localConfigPath;
+  typosLocalConfig =
+    if builtins.pathExists typosLocalConfigPath then
+      builtins.fromTOML (builtins.readFile typosLocalConfigPath)
+    else
+      { };
+  typosConfigPath = typosToml.generate "typos-config.toml" (
+    lib.recursiveUpdate config.rustEnv.typos.managedConfig typosLocalConfig
+  );
   prepareCargoSortWorkspace = ./prepare-cargo-sort-workspace.py;
   cargoSortWrapper = pkgs.writeShellScriptBin "cargo-sort-wrapper" ''
     set -euo pipefail
@@ -95,6 +111,23 @@ let
   '';
 in
 {
+  options.rustEnv.typos = {
+    localConfigPath = lib.mkOption {
+      type = lib.types.oneOf [
+        lib.types.str
+        lib.types.path
+      ];
+      default = "typos.toml";
+      description = "Repo-local typos config merged over rustEnv.typos.managedConfig.";
+    };
+
+    managedConfig = lib.mkOption {
+      type = lib.types.attrs;
+      default = { };
+      description = "Managed typos config merged first, before the repo-local typos.toml override.";
+    };
+  };
+
   config = {
     treefmt = {
       enable = lib.mkDefault true;
@@ -116,12 +149,24 @@ in
     };
 
     git-hooks = lib.mkIf config.treefmt.enable {
-      hooks.treefmt.enable = lib.mkDefault true;
+      hooks = {
+        treefmt.enable = lib.mkDefault true;
+        typos = {
+          enable = lib.mkDefault true;
+          entry = lib.mkForce "${typosBin} --config ${typosConfigPath} --force-exclude";
+        };
+      };
     };
+
+    packages = [ pkgs.typos ];
 
     scripts = {
       fmt.exec = treefmtBin;
       fmt-check.exec = "${treefmtBin} --fail-on-change";
+      spellcheck.exec = "${typosBin} --config ${typosConfigPath}";
+      spellcheck-fix.exec = "${typosBin} --config ${typosConfigPath} -w";
     };
+
+    outputs.typos_config = typosConfigPath;
   };
 }
