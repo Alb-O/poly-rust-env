@@ -20,17 +20,17 @@ Reusable Rust nightly base environment for polyrepo setups using `devenv` v2.
 
 ```yaml
 inputs:
-  dvnv-rust-env:
-    url: github:Alb-O/dvnv-rust-env
+  poly-rust-env:
+    url: github:Alb-O/poly-rust-env
     flake: false
 imports:
-  - dvnv-rust-env
+  - poly-rust-env
 ```
 
 ## Consumer treefmt overrides
 
 Consumers can extend the shared Rust formatting by adding extra programs under `treefmt.config`.
-This composes with `dvnv-rust-env` defaults (for example, `rustfmt` stays enabled):
+This composes with `poly-rust-env` defaults (for example, `rustfmt` stays enabled):
 
 ```nix
 {
@@ -95,7 +95,7 @@ For virtual workspaces or other non-root package manifests, set:
 ## Managed Cargo
 
 Enable this when you want each Rust repo to own manifest intent in
-`Cargo.dvnv.toml` while versions come from a shared catalog in this repo.
+`Cargo.poly.toml` while versions come from a shared catalog in this repo.
 
 ```nix
 {
@@ -120,7 +120,7 @@ When enabled:
 - virtual workspace roots are supported, including `[workspace.dependencies]`
 - treefmt `cargo-sort` also formats the configured `rustEnv.managedCargo.specPath` when it is inside the repo root
 
-Preferred `Cargo.dvnv.toml` style uses regular dependency tables with inline
+Preferred `Cargo.poly.toml` style uses regular dependency tables with inline
 tables or `true`, rather than one `[dependencies.<crate>]` block per crate:
 
 ```toml
@@ -136,7 +136,7 @@ local `Cargo.toml` materialization automatically while still exposing the
 generated manifest and source-tree outputs for downstream packaging.
 
 For a virtual-workspace layout, keep the root workspace manifest content in
-`Cargo.dvnv.toml` and keep member crate `Cargo.toml` files checked in normally.
+`Cargo.poly.toml` and keep member crate `Cargo.toml` files checked in normally.
 
 ## Bevy
 

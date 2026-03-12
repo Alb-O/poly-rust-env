@@ -15,6 +15,6 @@ where
 ## Managed Cargo deps
 
 - Root Cargo.toml is nix-generated to sync dep versions across repos
-  - To add deps to repo, edit Cargo.dvnv.toml (without dep ver number)
+  - To add deps to repo, edit Cargo.poly.toml (without dep ver number)
   - Regen Cargo.toml (devenv shell); if fails on dep not in Cargo.catalog.toml, add it
     - pin latest ver from cargo info

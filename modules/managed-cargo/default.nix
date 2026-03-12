@@ -22,7 +22,7 @@ let
     # - edit the shared catalog, not this file
     #
     # To change this repo's dependency/features/package metadata:
-    # - edit Cargo.dvnv.toml, then re-enter `devenv shell` or run `devenv test`
+    # - edit Cargo.poly.toml, then re-enter `devenv shell` or run `devenv test`
     # ---------------------------------------------------------------------------
     #
   '';
@@ -97,7 +97,7 @@ in
     enable = lib.mkOption {
       type = lib.types.bool;
       default = false;
-      description = "Generate Cargo.toml from a repo-owned Cargo.dvnv.toml and a shared crate version catalog.";
+      description = "Generate Cargo.toml from a repo-owned Cargo.poly.toml and a shared crate version catalog.";
     };
 
     catalogPath = lib.mkOption {
@@ -108,7 +108,7 @@ in
 
     specPath = lib.mkOption {
       type = lib.types.str;
-      default = "Cargo.dvnv.toml";
+      default = "Cargo.poly.toml";
       description = "Repo-owned Cargo manifest spec TOML without crates.io versions.";
     };
 

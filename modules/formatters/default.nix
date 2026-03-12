@@ -82,7 +82,7 @@ let
         set -euo pipefail
 
         # cargo-sort only knows how to operate on a file literally named
-        # Cargo.toml. For managed spec files like Cargo.dvnv.toml, build a
+        # Cargo.toml. For managed spec files like Cargo.poly.toml, build a
         # short-lived scratch workspace with only the manifests cargo-sort needs:
         # the root spec plus any workspace member Cargo.toml files.
         temp_workspace="$(mktemp -d "$dir/cargo-sort-wrapper.XXXXXX")"

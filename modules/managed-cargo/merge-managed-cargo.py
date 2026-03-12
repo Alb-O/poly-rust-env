@@ -46,7 +46,7 @@ def normalize_dependency_spec(crate_name, raw_spec):
         return dict(raw_spec)
 
     fail(
-        f"dependency {crate_name!r} must be a table or true in Cargo.dvnv.toml; "
+        f"dependency {crate_name!r} must be a table or true in Cargo.poly.toml; "
         "string shorthand is not supported because versions come from the shared catalog"
     )
 
@@ -68,7 +68,7 @@ def merge_dependency(crate_name, raw_spec, catalog):
 
     if "version" in spec and not any(key in spec for key in PASSTHROUGH_SOURCE_KEYS):
         fail(
-            f"dependency {crate_name!r} must not declare version in Cargo.dvnv.toml; "
+            f"dependency {crate_name!r} must not declare version in Cargo.poly.toml; "
             "move the version into the shared catalog"
         )
 
@@ -134,7 +134,7 @@ def main():
     spec = load_toml(spec_path)
 
     if not isinstance(spec, dict):
-        fail("Cargo.dvnv.toml must be a top-level table")
+        fail("Cargo.poly.toml must be a top-level table")
 
     json.dump(visit(spec, catalog), sys.stdout, indent=2, sort_keys=True)
     sys.stdout.write("\n")
