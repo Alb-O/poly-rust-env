@@ -133,6 +133,9 @@ in
       enable = lib.mkDefault true;
       config = {
         programs.rustfmt.enable = lib.mkDefault true;
+        # Keep treefmt on the same rustfmt binary as `cargo fmt`, otherwise
+        # nightly-only rustfmt options like import grouping silently diverge.
+        programs.rustfmt.package = config.languages.rust.toolchainPackage;
         settings.formatter.rustfmt.options = [
           # treefmt already supplies rustfmt's edition/skip-children flags.
           # Only point it at the shared config file here, or the wrapper ends
